@@ -1,5 +1,5 @@
 import { View, Text,TouchableOpacity, StatusBar, Image} from 'react-native'
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import styles from '../consts/ProductStyle';
 import { Ionicons,Feather } from '@expo/vector-icons';
 import { Card } from 'react-native-shadow-cards';
@@ -7,15 +7,31 @@ import products from '../consts/product';
 import NumericInput from 'react-native-numeric-input'
 import Cart_Screen from './Cart_Screen';
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
+// import { Axios } from 'axios';
+import { Button } from 'react-native-paper';
+import axios, * as others from 'axios';
 
 
 
 export default function Product_Screen({navigation, route}) {
 
+    const [desc, setDesc]= useState("");
+
+    const getDesc =()=> {
+        axios.get("http://192.168.137.46:80/Home/GetBag").then(
+            (res)=>{
+                
+                setDesc(res.data[0].bDesc);
+                
+                
+            }
+        )
+    }
+
 
     const product = route.params;
     const [qty, setQty] = React.useState(1);
-    console.log(qty)
+    //console.log(qty)
 
   return (
     <View style={styles.container}>
@@ -65,7 +81,9 @@ export default function Product_Screen({navigation, route}) {
 
 
         <View style={styles.desc_txt}>
-            <Text style={{ textAlign:'justify',}}>{product.desc}</Text>
+            <Text style={{ textAlign:'justify',}}>{desc}</Text>
+            {/* <Button onPress={getDesc}> GetDESC </Button> */}
+
         </View>
         
         <View style={styles.desc_txt}>
