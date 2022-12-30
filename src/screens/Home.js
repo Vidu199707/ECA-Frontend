@@ -8,17 +8,33 @@ import {
   Image,
   Animated,
 } from "react-native";
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { Card } from "react-native-shadow-cards";
-import products from "../consts/product";
+// import products from "../consts/product";
 import category from "../consts/Category";
 import styles from "../consts/Styles";
 import ModalPoup from "../component/ModalPopUp";
 import CategotyItem from "../component/CategotyItem";
+import axios from "axios";
+
 
 export default function Home({ navigation }) {
+
   const [visible, setShowModal] = React.useState(false);
+  const [product, getProduct, ] = useState([]);
+
+  useEffect(() => {
+   
+    axios
+      .get(
+        "http://192.168.137.1:80/Home/GetBag"
+      )
+      .then((res) => getProduct(res.data))
+      .catch((err) => console.log(err));
+  }, []);
+
+
 
   //----------------------------------------------Card items-----------------------------------------------------
 
@@ -29,8 +45,8 @@ export default function Home({ navigation }) {
         nestedScrollEnabled={true}
         showsHorizontalScrollIndicator={false}
       >
-        {products.map((product, i) => (
-          <View key={product.id}>
+        {product.map((product, i) => (
+          <View key={product.bid}>
             <Card style={styles.card}>
               <View
                 style={{
@@ -38,10 +54,10 @@ export default function Home({ navigation }) {
                   flexDirection: "row",
                 }}
               >
-                <Text style={styles.name}>{product.name}</Text>
+                <Text style={styles.name}>{product.bName}</Text>
               </View>
 
-              <Text style={styles.price_txt}>{product.price}</Text>
+              <Text style={styles.price_txt}>{product.bPrice}</Text>
               <TouchableOpacity
                 onPress={() => navigation.navigate("Product_Screen", product)}
               >
@@ -62,9 +78,11 @@ export default function Home({ navigation }) {
   //----------------------------------------------------------------------------------------------------------------------------------
 
   return (
+    
     <View
     style={styles.container}>
       <StatusBar backgroundColor={"#F7EFED"} barStyle="dark-content" />
+      
 
       <View style={styles.menu_icon}>
         <TouchableOpacity >
@@ -104,7 +122,7 @@ export default function Home({ navigation }) {
           nestedScrollEnabled={true}
         >
           {category.map((category) => (
-            <TouchableOpacity>
+            <TouchableOpacity key={category.id}>
               <Card style={styles.card0}>
                 <Text style={styles.category_txt}>{category.name}</Text>
               </Card>
@@ -195,7 +213,7 @@ export default function Home({ navigation }) {
 
         <View style={styles.verticleLine}></View>
        
-          <CategotyItem />
+          {/* <CategotyItem /> */}
        
       </ScrollView>
 

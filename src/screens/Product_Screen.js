@@ -15,18 +15,18 @@ import axios, * as others from 'axios';
 
 export default function Product_Screen({navigation, route}) {
 
-    const [desc, setDesc]= useState("");
+    const [products, getProduct, ] = useState([]);
 
-    const getDesc =()=> {
-        axios.get("http://192.168.137.46:80/Home/GetBag").then(
-            (res)=>{
-                
-                setDesc(res.data[0].bDesc);
-                
-                
-            }
-        )
-    }
+  useEffect(() => {
+   
+    // axios
+    //   .get(
+    //     "http://192.168.137.1:80/Home/GetBag"
+    //   )
+    //   .then((res) => getProduct(res.data))
+    //   .catch((err) => console.log(err));
+    console.log(route.params.bDesc);
+  }, []);
 
 
     const product = route.params;
@@ -58,8 +58,8 @@ export default function Product_Screen({navigation, route}) {
 
         
         <View style={{flexDirection:'row', justifyContent:'space-between', marginHorizontal:40}} >
-            <Text style={styles.pname}>{product.name}</Text>
-            <Text style={styles.pname}>{product.price}</Text>
+            <Text style={styles.pname}>{product.bName}</Text>
+            <Text style={styles.pname}>{product.bPrice}</Text>
         </View>
 
         <View style={styles.desc_txt} >
@@ -81,19 +81,19 @@ export default function Product_Screen({navigation, route}) {
 
 
         <View style={styles.desc_txt}>
-            <Text style={{ textAlign:'justify',}}>{desc}</Text>
-            {/* <Button onPress={getDesc}> GetDESC </Button> */}
+            <Text style={{ textAlign:'justify',}}>{product.bDesc}</Text>
+           
 
         </View>
         
-        <View style={styles.desc_txt}>
+        {/* <View style={styles.desc_txt}>
         
             <Text style={{fontSize:16, fontWeight:'bold'}}>features</Text>
             <Text style={{}}>{product.feature.one}</Text>
             <Text style={{}}>{product.feature.two}</Text>
             <Text style={{}}>{product.feature.three}</Text>
               
-        </View>
+        </View> */}
 
         <View style={styles.view3}>
             <TouchableOpacity onPress={() => navigation.navigate("Cart", product,qty)}>
